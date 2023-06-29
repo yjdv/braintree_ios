@@ -5,7 +5,7 @@ import BraintreeCore
 #endif
 
 /// Contains information about a PayPal payment method
-@objcMembers public class BTPayPalAccountNonce: BTPaymentMethodNonce {
+ open class BTPayPalAccountNonce: BTPaymentMethodNonce {
     
     /// Payer's email address.
     public let email: String?

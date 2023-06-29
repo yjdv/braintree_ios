@@ -44,7 +44,7 @@ import BraintreeCore
     /// - Parameter apiClient: An API client
     @objc(initWithAPIClient:)
     public init(apiClient: BTAPIClient) {
-        BTAppContextSwitcher.sharedInstance.register(BTVenmoClient.self)
+        BTAppContextSwitcher.shared.register(BTVenmoClient.self)
         self.apiClient = apiClient
     }
 
@@ -58,7 +58,7 @@ import BraintreeCore
     @objc(tokenizeWithVenmoRequest:completion:)
     public func tokenize(_ request: BTVenmoRequest, completion: @escaping (BTVenmoAccountNonce?, Error?) -> Void) {
         apiClient.sendAnalyticsEvent(BTVenmoAnalytics.tokenizeStarted)
-        let returnURLScheme = BTAppContextSwitcher.sharedInstance.returnURLScheme
+        let returnURLScheme = BTAppContextSwitcher.shared.returnURLScheme
 
         if returnURLScheme == "" {
             NSLog("%@ Venmo requires a return URL scheme to be configured via [BTAppContextSwitcher setReturnURLScheme:]", BTLogLevelDescription.string(for: .critical))

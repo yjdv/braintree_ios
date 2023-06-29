@@ -2,11 +2,11 @@ import XCTest
 @testable import BraintreeCore
 
 class BTAppContextSwitcher_Tests: XCTestCase {
-    var appSwitch = BTAppContextSwitcher.sharedInstance
+    var appSwitch = BTAppContextSwitcher.shared
 
     override func setUp() {
         super.setUp()
-        appSwitch = BTAppContextSwitcher.sharedInstance
+        appSwitch = BTAppContextSwitcher.shared
     }
 
     override func tearDown() {
@@ -17,7 +17,7 @@ class BTAppContextSwitcher_Tests: XCTestCase {
     }
 
     func testSetReturnURLScheme() {
-        BTAppContextSwitcher.sharedInstance.returnURLScheme = "com.some.scheme"
+        BTAppContextSwitcher.shared.returnURLScheme = "com.some.scheme"
         XCTAssertEqual(appSwitch.returnURLScheme, "com.some.scheme")
     }
 
@@ -25,7 +25,7 @@ class BTAppContextSwitcher_Tests: XCTestCase {
         appSwitch.register(MockAppContextSwitchClient.self)
         let expectedURL = URL(string: "fake://url")!
 
-        BTAppContextSwitcher.sharedInstance.handleOpen(expectedURL)
+        BTAppContextSwitcher.shared.handleOpen(expectedURL)
 
         XCTAssertEqual(MockAppContextSwitchClient.lastCanHandleURL!, expectedURL)
     }
@@ -35,7 +35,7 @@ class BTAppContextSwitcher_Tests: XCTestCase {
         MockAppContextSwitchClient.cannedCanHandle = true
         let expectedURL = URL(string: "fake://url")!
 
-        let handled = BTAppContextSwitcher.sharedInstance.handleOpen(expectedURL)
+        let handled = BTAppContextSwitcher.shared.handleOpen(expectedURL)
 
         XCTAssertTrue(handled)
         XCTAssertEqual(MockAppContextSwitchClient.lastHandleReturnURL!, expectedURL)
@@ -45,14 +45,14 @@ class BTAppContextSwitcher_Tests: XCTestCase {
         appSwitch.register(MockAppContextSwitchClient.self)
         MockAppContextSwitchClient.cannedCanHandle = false
 
-        let handled = BTAppContextSwitcher.sharedInstance.handleOpen(URL(string: "fake://url")!)
+        let handled = BTAppContextSwitcher.shared.handleOpen(URL(string: "fake://url")!)
 
         XCTAssertFalse(handled)
         XCTAssertNil(MockAppContextSwitchClient.lastHandleReturnURL)
     }
 
     func testHandleOpenURL_withNoAppSwitching_returnsFalse() {
-        let handled = BTAppContextSwitcher.sharedInstance.handleOpen(URL(string: "scheme://")!)
+        let handled = BTAppContextSwitcher.shared.handleOpen(URL(string: "scheme://")!)
         XCTAssertFalse(handled)
     }
     
@@ -62,7 +62,7 @@ class BTAppContextSwitcher_Tests: XCTestCase {
 
         let mockURLContext = BTMockOpenURLContext(url: URL(string: "my-url.com")!).mock
 
-        let handled = BTAppContextSwitcher.sharedInstance.handleOpenURL(context: mockURLContext)
+        let handled = BTAppContextSwitcher.shared.handleOpenURL(context: mockURLContext)
 
         XCTAssertTrue(handled)
         XCTAssertEqual(MockAppContextSwitchClient.lastCanHandleURL, URL(string: "my-url.com"))
@@ -75,7 +75,7 @@ class BTAppContextSwitcher_Tests: XCTestCase {
 
         let mockURLContext = BTMockOpenURLContext(url: URL(string: "fake://url")!).mock
 
-        let handled = BTAppContextSwitcher.sharedInstance.handleOpenURL(context: mockURLContext)
+        let handled = BTAppContextSwitcher.shared.handleOpenURL(context: mockURLContext)
 
         XCTAssertFalse(handled)
         XCTAssertNil(MockAppContextSwitchClient.lastHandleReturnURL)
@@ -83,7 +83,7 @@ class BTAppContextSwitcher_Tests: XCTestCase {
         
     func testHandleOpenURLContext_withNoAppSwitching_returnsFalse() {
         let mockURLContext = BTMockOpenURLContext(url: URL(string: "fake://url")!).mock
-        let handled = BTAppContextSwitcher.sharedInstance.handleOpenURL(context: mockURLContext)
+        let handled = BTAppContextSwitcher.shared.handleOpenURL(context: mockURLContext)
         XCTAssertFalse(handled)
     }
 

@@ -5,7 +5,7 @@ import BraintreeCore
 #endif
 
 /// Contains information about a Venmo Account payment method
-@objcMembers public class BTVenmoAccountNonce: BTPaymentMethodNonce {
+open class BTVenmoAccountNonce: BTPaymentMethodNonce {
 
     // MARK: - Public Properties
 

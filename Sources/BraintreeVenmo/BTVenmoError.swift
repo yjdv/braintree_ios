@@ -57,6 +57,8 @@ enum BTVenmoError: Error, CustomNSError, LocalizedError {
 
     /// 9. Enriched Customer Data is disabled
     case enrichedCustomerDataDisabled
+    ///  10. User Cancelled
+    case canceled
 
     static var errorDomain: String {
         "com.braintreepayments.BTVenmoErrorDomain"
@@ -84,6 +86,8 @@ enum BTVenmoError: Error, CustomNSError, LocalizedError {
             return 8
         case .enrichedCustomerDataDisabled:
             return 9
+        case .canceled:
+            return 10
         }
     }
 
@@ -109,6 +113,8 @@ enum BTVenmoError: Error, CustomNSError, LocalizedError {
             return "Failed to fetch Braintree configuration."
         case .enrichedCustomerDataDisabled:
             return "Cannot collect customer data when ECD is disabled. Enable this feature in the Control Panel to collect this data."
+        case .canceled:
+            return "User Canceled transaction"
         }
     }
 }

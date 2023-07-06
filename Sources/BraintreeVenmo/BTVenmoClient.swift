@@ -210,6 +210,8 @@ import BraintreeCore
                     continuation.resume(throwing: error)
                 } else if let nonce {
                     continuation.resume(returning: nonce)
+                } else {
+                    continuation.resume(throwing: BTVenmoError.canceled)
                 }
             }
         }

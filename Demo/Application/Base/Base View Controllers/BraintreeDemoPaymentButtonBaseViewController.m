@@ -23,9 +23,10 @@
     [self.view addSubview:self.paymentButton];
 
     [NSLayoutConstraint activateConstraints:@[
-        [self.paymentButton.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        [self.paymentButton.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor constant:20],
+        [self.paymentButton.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor constant:-20],
         [self.paymentButton.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor constant:self.centerYConstant],
-        [self.paymentButton.heightAnchor constraintEqualToConstant:44.0]
+        [self.paymentButton.heightAnchor constraintEqualToConstant:100.0]
     ]];
 }
 

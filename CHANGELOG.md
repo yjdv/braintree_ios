@@ -1,5 +1,49 @@
 # Braintree iOS SDK Release Notes
 
+## unreleased
+* BraintreeCore
+  * Fix bug where `type` was always returned as `Unknown` in `fetchPaymentMethodNonces` (fixes #1099)
+  * Analytics
+    * Send `tenant_name` in `event_params` to PayPal's analytics service (FPTI)
+    * Update `component` from `btmobilesdk` to `braintreeclientsdk` for PayPal's analytics service (FPTI)
+    * Send `correlation_id`, when possible, in PayPal analytic events
+
+## 6.6.0 (2023-08-22)
+* BraintreePayPalNativeCheckout
+  * Update PayPalCheckout from 1.0.0 to 1.1.0.
+
+## 5.23.0 (2023-08-18)
+* BraintreeVenmo
+  * Allow merchants to collect enriched customer data if enabled in the Braintree Control Panel
+  * Add the following properties to `BTVenmoRequest`
+    * `collectCustomerBillingAddress`
+    * `collectCustomerShippingAddress`
+    * `totalAmount`
+    * `subTotalAmount`
+    * `discountAmount`
+    * `taxAmount`
+    * `shippingAmount`
+    * `lineItems`
+
+## 6.5.0 (2023-08-10)
+* BraintreeVenmo
+  * Add additional error parsing for Venmo errors
+  * Throw cancelation specific error for `BTVenmoClient.tokenize()` (fixes #1085) 
+    * _The callback style version of this function previously returned `(nil, nil)` for the cancel scenario, but will now return `(nil, error)` instead._
+* BraintreeCore
+  * Send `live` instead of `production` for the `merchant_sdk_env` tag to PayPal's analytics service (FPTI)
+
+## 6.4.0 (2023-07-18)
+* Expose reference documentation for `BTAppContextSwitcher.handleOpen(_:)` and `BTAppContextSwitcher.handleOpenURL(context:)`
+* Fixed a bug to return `firstName`, `lastName`, `email`, and `payerID` on `BTPayPalNativeCheckoutAccountNonce` when available.
+* BraintreeVenmo
+  * Fix bug where tokenizations failed when sending an empty dictionary for `transactionDetails` in the `CreateVenmoPaymentContext` call (fixes #1074)
+
+## 6.3.0 (2023-07-10)
+* BraintreePayPalNativeCheckout (General Availability release)
+  * Update PayPalCheckout from 0.110.0 to 1.0.0. This is our newly released General Availability version
+     * _Note: This module will now be subject to semantic versioning_
+
 ## 6.2.0 (2023-06-27)
 * BraintreePayPalNativeCheckout (BETA)
   * Fix bug where setting `userAction` does not update button as expected
@@ -28,6 +72,12 @@
   * See [list of new / updated error cases and codes](SDK_ERROR_CODES.md)
   
 **Note:** Includes all changes in [6.0.0-beta4](#600-beta4-2023-06-01), [6.0.0-beta3](#600-beta3-2023-04-18), [6.0.0-beta2](#600-beta2-2023-01-30), and [6.0.0-beta1](#600-beta1-2022-12-13)
+
+## 5.22.0 (2023-06-08)
+* Require Xcode 14.1 (per [App Store requirements](https://developer.apple.com/news/?id=jd9wcyov#:~:text=Starting%20April%2025%2C%202023%2C%20iOS,on%20the%20Mac%20App%20Store))
+* Deprecate 3DS v1. Any attempt to use 3DS v1 will now throw an error. See [Migrating to 3D Secure 2](https://developer.paypal.com/braintree/docs/guides/3d-secure/migration) for more information.
+* Carthage `.framework`s are no longer supported in Xcode 14.1, please replace all Frameworks with XCFrameworks and use `--use-xcframeworks` for all Carthage steps
+  * Multi-architecture platforms are not supported when building framework bundles in Xcode 12+. [Prefer building with XCFrameworks](https://github.com/Carthage/Carthage#building-platform-independent-xcframeworks-xcode-12-and-above)).
 
 ## 6.0.0-beta4 (2023-06-01)
 * Move from Braintree to PayPal analytics service

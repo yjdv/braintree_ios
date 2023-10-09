@@ -237,6 +237,26 @@ class BTVenmoClient_Tests: XCTestCase {
             }
         }
     }
+    
+    func testTokenize_withoutLineItems_createsPaymentContextWithoutTransactionDetails() {
+        let venmoClient = BTVenmoClient(apiClient: mockAPIClient)
+        BTAppContextSwitcher.sharedInstance.returnURLScheme = "scheme"
+        let fakeApplication = FakeApplication()
+        venmoClient.application = fakeApplication
+        venmoClient.bundle = FakeBundle()
+
+        venmoClient.tokenize(venmoRequest) { _, _ in }
+        
+        XCTAssertEqual(mockAPIClient.lastPOSTAPIClientHTTPType, .graphQLAPI)
+        
+        let params = mockAPIClient.lastPOSTParameters as! [String: Any]
+        let queryParams = params["query"] as! String
+        XCTAssertTrue(queryParams.contains("mutation CreateVenmoPaymentContext"))
+        
+        let inputParams = (params["variables"] as! [String: [String: Any]])["input"]
+        let paysheetDetails = inputParams?["paysheetDetails"] as! [String: Any]
+        XCTAssertNil(paysheetDetails["transactionDetails"])
+    }
 
     func testTokenizeVenmoAccount_opensVenmoURLWithPaymentContextID() {
         let venmoClient = BTVenmoClient(apiClient: mockAPIClient)
@@ -593,7 +613,7 @@ class BTVenmoClient_Tests: XCTestCase {
         XCTAssertEqual(mockAPIClient.postedAnalyticsEvents.last!, BTVenmoAnalytics.tokenizeFailed)
     }
 
-    func testTokenizeVenmoAccount_whenAppSwitchCanceled_callsBackWithNoError() {
+    func testTokenizeVenmoAccount_whenAppSwitchCanceled_callsBackWithCancelError() {
         let venmoClient = BTVenmoClient(apiClient: mockAPIClient)
         venmoClient.application = FakeApplication()
         venmoClient.bundle = FakeBundle()
@@ -602,7 +622,12 @@ class BTVenmoClient_Tests: XCTestCase {
         let expectation = expectation(description: "Callback invoked")
         venmoClient.tokenize(venmoRequest) { venmoAccount, error in
             XCTAssertNil(venmoAccount)
-            XCTAssertNil(error)
+            XCTAssertNotNil(error)
+            
+            let error = error! as NSError
+            XCTAssertEqual(error.localizedDescription, BTVenmoError.canceled.localizedDescription)
+            XCTAssertEqual(error.code, 10)
+            
             expectation.fulfill()
         }
         BTVenmoClient.handleReturnURL(URL(string: "scheme://x-callback-url/vzero/auth/venmo/cancel")!)

@@ -57,7 +57,8 @@ enum BTVenmoError: Error, CustomNSError, LocalizedError {
 
     /// 9. Enriched Customer Data is disabled
     case enrichedCustomerDataDisabled
-    ///  10. User Cancelled
+    
+    /// 10.  The Venmo flow was canceled by the user
     case canceled
 
     static var errorDomain: String {
@@ -114,7 +115,7 @@ enum BTVenmoError: Error, CustomNSError, LocalizedError {
         case .enrichedCustomerDataDisabled:
             return "Cannot collect customer data when ECD is disabled. Enable this feature in the Control Panel to collect this data."
         case .canceled:
-            return "User Canceled transaction"
+            return "Venmo flow was canceled by the user."
         }
     }
 }
